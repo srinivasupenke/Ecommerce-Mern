@@ -5,7 +5,7 @@ import ProductItem from "../components/ProductItem";
 import { ShopContext } from "../context/ShopContext";
 
 const Collection = () => {
-  const { products } = useContext(ShopContext);
+  const { products, search, showSearch } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
 
   const [filterProducts, setFilterProducts] = useState([]);
@@ -31,6 +31,12 @@ const Collection = () => {
 
   const applyFilter = () => {
     let productsCopy = products.slice();
+
+    if (showSearch && search) {
+      productsCopy = productsCopy.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
     if (category.length > 0) {
       productsCopy = productsCopy.filter((item) =>
@@ -64,7 +70,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
+  }, [category, subCategory, search, showSearch]);
 
   useEffect(() => {
     sortProduct();
@@ -101,7 +107,7 @@ const Collection = () => {
                 className="w-3"
                 value={"Men"}
                 onChange={toggleCategory}
-              />{" "}
+              />
               Men
             </p>
             <p className="flex gap-2">
@@ -110,7 +116,7 @@ const Collection = () => {
                 className="w-3"
                 value={"Women"}
                 onChange={toggleCategory}
-              />{" "}
+              />
               Women
             </p>
             <p className="flex gap-2">
@@ -119,7 +125,7 @@ const Collection = () => {
                 className="w-3"
                 value={"Kids"}
                 onChange={toggleCategory}
-              />{" "}
+              />
               Kids
             </p>
           </div>
